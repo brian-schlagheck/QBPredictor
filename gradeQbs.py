@@ -11,7 +11,7 @@ with open("data/Rating_Data.csv") as f:
 
 qbs.pop(0)
 # Stats -> cmp_percentage, td_int_ratio, yards_per_attempt, td_attempt_ratio, int_attempt_ratio
-for item in qbs[1:]:
+for item in qbs[0:]:
     cmp_percentage = float(item["passing_cmp"]) / float(item["passing_att"])
     td_int_ratio = float(item["passing_tds"]) / float(item["passing_ints"])
     yards_per_attempt = float(item["passing_yds"]) / float(item["passing_att"])
@@ -27,5 +27,57 @@ for item in qbs[1:]:
 
     item.update({"cmp_percentage": cmp_percentage, "td_int_ratio": td_int_ratio, "yards_per_attempt": yards_per_attempt, "td_attempt_ratio": td_attempt_ratio, "int_attempt_ratio": int_attempt_ratio, "average_pass_yardage": average_pass_yardage, "qb_rating": qb_rating})
 
-    # normalize all stats between 0 and 100
 print qbs[0]
+
+# Get data for normalization
+cmp_percentages = [x["cmp_percentage"] for x in qbs]
+min_cmp_percentages = min(cmp_percentages)
+max_cmp_percentages = max(cmp_percentages)
+
+td_int_ratios = [x["td_int_ratio"] for x in qbs]
+min_td_int_ratios = min(td_int_ratios)
+max_td_int_ratios = max(td_int_ratios)
+
+yards_per_attempts = [x["yards_per_attempt"] for x in qbs]
+min_yards_per_attempts = min(yards_per_attempts)
+max_yards_per_attempts = max(yards_per_attempts)
+
+td_attempt_ratios = [x["td_attempt_ratio"] for x in qbs]
+min_td_attempt_ratios = min(td_attempt_ratios)
+max_td_attempt_ratios = max(td_attempt_ratios)
+
+int_attempt_ratios = [x["int_attempt_ratio"] for x in qbs]
+min_int_attempt_ratios = min(int_attempt_ratios)
+max_int_attempt_ratios = max(int_attempt_ratios)
+
+average_pass_yardages = [x["average_pass_yardage"] for x in qbs]
+min_average_pass_yardages = min(average_pass_yardages)
+max_average_pass_yardages = max(average_pass_yardages)
+
+qb_ratings = [x["qb_rating"] for x in qbs]
+min_qb_ratings = min(qb_ratings)
+max_qb_ratings = max(qb_ratings)
+
+# Get overall score
+for item in qbs:
+    normalized_cmp_percentage = (item["cmp_percentage"] - min_cmp_percentages) / (max_cmp_percentages - min_cmp_percentages)
+    normalized_td_int_ratio = (item["td_int_ratio"] - min_td_int_ratios) / (max_td_int_ratios - min_td_int_ratios)
+    normalized_yards_per_attempts = (item["yards_per_attempt"] - min_yards_per_attempts) / (max_yards_per_attempts - min_yards_per_attempts)
+    normalized_td_attempt_ratios = (item["td_attempt_ratio"] - min_td_attempt_ratios) / (max_td_attempt_ratios - min_td_attempt_ratios)
+    normalized_int_attempts_ratios = (item["int_attempt_ratio"] - min_int_attempt_ratios) / (max_int_attempt_ratios - min_int_attempt_ratios)
+    normalized_average_pass_yardages = (item["average_pass_yardage"] - min_average_pass_yardages) / (max_average_pass_yardages - min_average_pass_yardages)
+    normalized_qb_ratings = (item["qb_rating"] - min_qb_ratings) / (max_qb_ratings - min_qb_ratings)
+    overall_score = (normalized_cmp_percentage + normalized_td_int_ratio + normalized_yards_per_attempts + normalized_td_attempt_ratios + normalized_int_attempts_ratios + normalized_average_pass_yardages + normalized_qb_ratings ) / 7
+    item.update({"overall_score": overall_score})
+
+
+overall_scores = [x["overall_score"] for x in qbs]
+min_overall_scores = min(overall_scores)
+max_overall_scores = max(overall_scores)
+
+# normalize overall score between 50 and 100
+for item in qbs:
+    normalized_overall_score = (item["overall_score"] - min_overall_scores) / (max_overall_scores - min_overall_scores) * 50 + 50
+    item.update({"overall_score": normalized_overall_score})
+    print item["full_name"]
+    print normalized_overall_score
