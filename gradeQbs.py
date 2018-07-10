@@ -79,5 +79,10 @@ max_overall_scores = max(overall_scores)
 for item in qbs:
     normalized_overall_score = (item["overall_score"] - min_overall_scores) / (max_overall_scores - min_overall_scores) * 50 + 50
     item.update({"overall_score": normalized_overall_score})
+    #print item["full_name"]
+    #print normalized_overall_score
+
+newlist = sorted(qbs, key=lambda k: k['overall_score'])
+for item in newlist:
     print item["full_name"]
-    print normalized_overall_score
+    print item["overall_score"]
