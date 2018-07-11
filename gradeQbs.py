@@ -62,7 +62,7 @@ max_qb_ratings = max(qb_ratings)
 for item in qbs:
     normalized_cmp_percentage = (item["cmp_percentage"] - min_cmp_percentages) / (max_cmp_percentages - min_cmp_percentages)
     normalized_td_int_ratio = math.log10(1 + 99 * ((item["td_int_ratio"] - min_td_int_ratios) / (max_td_int_ratios - min_td_int_ratios)))
-    normalized_yards_per_attempts = math.log10(1 + 99 * ((item["yards_per_attempts"] - min_yards_per_attempts) / (max_yards_per_attempts - min_yards_per_attempts)))
+    normalized_yards_per_attempts = (item["yards_per_attempt"] - min_yards_per_attempts) / (max_yards_per_attempts - min_yards_per_attempts)
     normalized_td_attempt_ratios = (item["td_attempt_ratio"] - min_td_attempt_ratios) / (max_td_attempt_ratios - min_td_attempt_ratios)
     normalized_int_attempts_ratios = (item["int_attempt_ratio"] - min_int_attempt_ratios) / (max_int_attempt_ratios - min_int_attempt_ratios)
     normalized_average_pass_yardages = (item["average_pass_yardage"] - min_average_pass_yardages) / (max_average_pass_yardages - min_average_pass_yardages)
